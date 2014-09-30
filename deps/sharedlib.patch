@@ -5,7 +5,7 @@
  OBJS := $(patsubst %.cpp, %.o, $(SOURCES))
  
 -CFLAGS := -O3 -D_NDEBUG
-+CFLAGS := -O3 -D_NDEBUG -fPIC
++CFLAGS := -O3 -D_NDEBUG -fPIC -fvisibility=hidden -std=c++1y
  CXX ?= c++
  LIBS := 
  INCLUDES := 
@@ -23,3 +23,7 @@
  
  .cpp.o:
  	$(CXX) $(CFLAGS) ${INCLUDES} $< -c -o $@
+ 
+ clean:
+-	rm -f ${OBJS} blossom5
++	rm -f ${OBJS} blossom5.so
