@@ -2,7 +2,7 @@ using BinDeps
 
 @BinDeps.setup
 
-blossom5 = library_dependency("blossom5.so")
+blossom5 = library_dependency("blossom5")
 
 provides(Sources, URI("http://pub.ist.ac.at/~vnk/software/blossom5-v2.04.src.tar.gz"), blossom5, SHA="22ec3d6ac23fe8adcce23393d08473af46bf9427105540a7e36f6807c0b50c0c")
 
@@ -25,4 +25,4 @@ provides(BuildProcess,
         end
     end), blossom5)
 
-@BinDeps.install [:blossom5  => :_jl_libblossom5]
+@BinDeps.install [:blossom5  => :_jl_blossom5]
