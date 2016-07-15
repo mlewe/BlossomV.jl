@@ -4,10 +4,10 @@ using BinDeps
 
 blossom5 = library_dependency("blossom5")
 
-provides(Sources, URI("http://pub.ist.ac.at/~vnk/software/blossom5-v2.04.src.tar.gz"), blossom5, SHA="22ec3d6ac23fe8adcce23393d08473af46bf9427105540a7e36f6807c0b50c0c")
+provides(Sources, URI("http://pub.ist.ac.at/~vnk/software/blossom5-v2.05.src.tar.gz"), blossom5)
 
 prefix = usrdir(blossom5)
-blossom5srcdir = joinpath(srcdir(blossom5), "blossom5-v2.04.src")
+blossom5srcdir = joinpath(srcdir(blossom5), "blossom5-v2.05.src")
 
 provides(BuildProcess,
     (@build_steps begin
@@ -25,4 +25,4 @@ provides(BuildProcess,
         end
     end), blossom5)
 
-@BinDeps.install [:blossom5  => :_jl_blossom5]
+@BinDeps.install Dict(:blossom5  => :_jl_blossom5)
