@@ -1,5 +1,3 @@
-sudo: required
-dist: trusty
 language: julia
 notifications:
   email: false
@@ -7,6 +5,14 @@ julia:
   - 0.3
   - 0.4
   - nightly
+env:
+  - CXX=g++-4.9
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.9
 #script:
 #  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
 #  - julia -e 'Pkg.init(); Pkg.clone(pwd()); Pkg.test("BlossomV")'
