@@ -25,4 +25,4 @@ provides(BuildProcess,
         end
     end), blossom5)
 
-@BinDeps.install Dict(:blossom5  => :_jl_blossom5)
+@BinDeps.install Dict([(:blossom5, :_jl_blossom5)])
