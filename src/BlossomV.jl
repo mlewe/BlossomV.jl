@@ -34,7 +34,7 @@ end
 dense_num_edges(node_num) =  node_num*(node_num-1)÷2
 
 Matching(node_num::Integer) = Matching(node_num, dense_num_edges(node_num))      
-Matching(node_num::Integer, edge_num_max::Integer) = Matching(node_num % Int32, edge_num_max % Int32)
+Matching(node_num::Integer, edge_num_max::Integer) = Matching(Int32(node_num), Int32(edge_num_max))
 function Matching(node_num::Int32, edge_num_max::Int32)
     assert(node_num % 2 == 0)
     ptr = ccall((:matching_construct, _jl_blossom5), Ptr{Void}, (Int32, Int32), node_num, edge_num_max)
@@ -44,7 +44,7 @@ end
 
 
 function add_edge(matching::PerfectMatchingCtx, first_node::Integer, second_node::Integer, cost::Integer)
-	add_edge(matching, first_node % Int32, second_node % Int32, cost % Int32)
+	add_edge(matching, Int32(first_node), Int32(second_node), Int32(cost))
 end
 
 function add_edge(matching::PerfectMatchingCtx, first_node::Int32, second_node::Int32, cost::Int32)
@@ -63,7 +63,7 @@ end
 
 
 
-get_match(matching::PerfectMatchingCtx, node::Integer) = get_match(matching, node % Int32)
+get_match(matching::PerfectMatchingCtx, node::Integer) = get_match(matching, Int32(node))
 function get_match(matching::PerfectMatchingCtx, node::Int32)
     ccall((:matching_get_match, _jl_blossom5), Int32, (Ptr{Void}, Int32), matching.ptr, node)
 end
