@@ -22,7 +22,7 @@ extern "C" {
 
 matching_t matching_construct(int32_t node_num, int32_t edge_num_max) {
     matching_t result = nullptr;
-    result = std::make_unique<matching>(node_num, edge_num_max).release();
+    result = new matching(node_num, edge_num_max);
     return result;
 }
 

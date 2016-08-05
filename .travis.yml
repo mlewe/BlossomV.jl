@@ -3,15 +3,11 @@ notifications:
   email: false
 julia:
   - 0.4
+  - 0.5
   - nightly
-env:
-  - CXX=g++-4.9
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-4.9
+matrix:
+  allow_failures:
+    - julia: nightly
 #script:
 #  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
 #  - julia -e 'Pkg.init(); Pkg.clone(pwd()); Pkg.test("BlossomV")'

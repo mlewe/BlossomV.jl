@@ -5,7 +5,7 @@
  OBJS := $(patsubst %.cpp, %.o, $(SOURCES))
  
 -CFLAGS := -O3 -D_NDEBUG
-+CFLAGS := -O3 -D_NDEBUG -fPIC -fvisibility=hidden -std=c++1y
++CFLAGS := -O3 -D_NDEBUG -fPIC -fvisibility=hidden -std=c++0x
  CXX ?= c++
  LIBS := 
  INCLUDES := 
