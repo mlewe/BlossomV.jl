@@ -26,3 +26,4 @@ or similar.
 A common thing that goes wrong is not having current enough version of C++ and
 its stdlibs. Currently the minimum requirements are a compiler supporting the
 C++11 standard (e.g. gcc-4.6 on ubuntu 14.04 should be recent enough).
+You can check your current compiler by running `c++ --version` from the shell.
