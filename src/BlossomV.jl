@@ -88,7 +88,7 @@ function get_all_matches(m::PerfectMatchingCtx, n_nodes::Integer)
     return ret
 end
 
-function verbose(matching::PerfectMatchingCtx, verbose::Integer)
+function verbose(matching::PerfectMatchingCtx, verbose::Bool)
     ccall((:matching_verbose, _jl_blossom5), Void, (Ptr{Void}, Bool), matching.ptr, verbose)
 end
 
