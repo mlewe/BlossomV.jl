@@ -16,6 +16,7 @@ type PerfectMatchingCtx
     function PerfectMatchingCtx(ptr::Ptr{Void})
         self = new(ptr)
         finalizer(self, destroy)
+        verbose(self, false)
         self
     end
 end
@@ -86,4 +87,9 @@ function get_all_matches(m::PerfectMatchingCtx, n_nodes::Integer)
     @assert(kk-1 == n_nodes÷2)
     return ret
 end
+
+function verbose(matching::PerfectMatchingCtx, verbose::Integer)
+    ccall((:matching_verbose, _jl_blossom5), Void, (Ptr{Void}, Bool), matching.ptr, verbose)
+end
+
 end # module

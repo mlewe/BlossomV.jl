@@ -24,6 +24,9 @@ void matching_solve(matching_t matching);
 INTERFACE_EXPORT
 int32_t matching_get_match(matching_t matching, int32_t node);
 
+INTERFACE_EXPORT
+void matching_verbose(matching_t matching, bool verbose);
+
 #ifdef __cplusplus
 }
 #endif

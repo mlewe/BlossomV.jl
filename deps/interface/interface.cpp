@@ -42,6 +42,10 @@ int32_t matching_get_match(matching_t matching, int32_t node) {
     return matching->actual.GetMatch(node);
 }
 
+void matching_verbose(matching_t matching, bool verbose) {
+    matching->actual.options.verbose = verbose;
+}
+
 #ifdef __cplusplus
 }
 #endif
