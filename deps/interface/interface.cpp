@@ -46,6 +46,14 @@ void matching_verbose(matching_t matching, bool verbose) {
     matching->actual.options.verbose = verbose;
 }
 
+int blossom5_julia_version_major() {
+    return 0;
+}
+
+int blossom5_julia_version_minor() {
+    return 2;
+}
+
 #ifdef __cplusplus
 }
 #endif

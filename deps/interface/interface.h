@@ -27,6 +27,12 @@ int32_t matching_get_match(matching_t matching, int32_t node);
 INTERFACE_EXPORT
 void matching_verbose(matching_t matching, bool verbose);
 
+INTERFACE_EXPORT
+int blossom5_julia_version_major();
+
+INTERFACE_EXPORT
+int blossom5_julia_version_minor();
+
 #ifdef __cplusplus
 }
 #endif
