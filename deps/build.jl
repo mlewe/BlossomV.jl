@@ -1,4 +1,4 @@
-version = v"0.2.0"
+version = v"0.2.1"
 
 using BinDeps
 
