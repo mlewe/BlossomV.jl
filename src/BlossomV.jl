@@ -1,3 +1,4 @@
+__precompile__()
 module BlossomV
 
 if isfile(joinpath(Pkg.dir("BlossomV"),"deps","deps.jl"))
