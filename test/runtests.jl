@@ -13,10 +13,24 @@ end
         0 1 500
     ]
 
-    m = Matching(2)
+    m = Matching(2) # defaults to Int32
     for row_ii in 1:size(differences,1)
         n1,n2, c = differences[row_ii,:]
         add_edge(m,n1,n2,c)
+    end
+    solve(m)
+    @test get_match(m,0) == 1
+    @test get_match(m,1) == 0
+
+
+    differences = [
+        0 1 1.3
+    ]
+
+    m = Matching(Float64, 2)
+    for row_ii in 1:size(differences,1)
+        n1,n2, c = differences[row_ii,:]
+        add_edge(m,Int(n1),Int(n2),c)
     end
     solve(m)
     @test get_match(m,0) == 1
@@ -32,7 +46,7 @@ end
         1 3 1000
     ]
 
-    m = Matching(4)
+    m = Matching(Int, 4)
     for row_ii in 1:size(differences,1)
         n1,n2, c = differences[row_ii,:]
         add_edge(m,n1,n2,c)
@@ -44,7 +58,7 @@ end
     @test get_match(m,3) == 2
 end
 
-@testset "Intermidiate Case -- no greedy solution" begin
+@testset "Intermediate Case -- no greedy solution" begin
     differences = [
         0 1 500
         0 2 400
@@ -53,10 +67,10 @@ end
         1 3 1000
     ]
 
-    m = Matching(4)
+    m = Matching(Int, 4)
     for row_ii in 1:size(differences,1)
         n1,n2, c = differences[row_ii,:]
-        add_edge(m,n1,n2,c)
+        add_edge(m,Int(n1),Int(n2),c)
     end
     solve(m)
     @test get_match(m,0) == 2

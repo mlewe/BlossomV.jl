@@ -16,29 +16,51 @@ function validate(name, handle)
     return version < bin_version
 end
 
-blossom5 = library_dependency("blossom5", validate=validate)
+blossom5int32 = library_dependency("blossom5int32", validate=validate)
+blossom5float64 = library_dependency("blossom5float64")
 
-provides(Sources, URI("http://pub.ist.ac.at/~vnk/software/blossom5-v2.05.src.tar.gz"), blossom5, SHA="6bb2fabaa4a5eb957385c81f2cdad139454afebbdb19d6deea61ced5f7c06489")
+provides(Sources, URI("http://pub.ist.ac.at/~vnk/software/blossom5-v2.05.src.tar.gz"), blossom5int32, SHA="6bb2fabaa4a5eb957385c81f2cdad139454afebbdb19d6deea61ced5f7c06489")
 
-prefix = usrdir(blossom5)
-blossom5srcdir = joinpath(srcdir(blossom5), "blossom5-v2.05.src")
+prefix = usrdir(blossom5int32)
+blossom5srcdir = joinpath(srcdir(blossom5int32), "blossom5-v2.05.src")
 
 provides(BuildProcess,
     (@build_steps begin
-        `rm -rf $prefix`
+        # `rm -rf $prefix`
         `rm -rf $blossom5srcdir`
-        GetSources(blossom5)
+        GetSources(blossom5int32)
         @build_steps begin
             ChangeDirectory(blossom5srcdir)
-            FileRule(joinpath(libdir(blossom5), "blossom5.so"),
+            FileRule(joinpath(libdir(blossom5int32), "blossom5int32.so"),
                 @build_steps begin
                     CreateDirectory(joinpath(prefix, "lib"))
                     `sh -c "patch < ../../sharedlib.patch"`
                     `sh -c "cp ../../interface/* ./"`
                     MakeTargets(["all"])
-                    `cp blossom5.so $prefix/lib/blossom5.so`
+                    `cp -f blossom5.so $prefix/lib/blossom5int32.so`
                 end)
         end
-    end), blossom5)
+    end), blossom5int32)
 
-@BinDeps.install Dict([(:blossom5, :_jl_blossom5)])
+
+provides(BuildProcess,
+    (@build_steps begin
+        # `rm -rf $prefix`
+        `rm -rf $blossom5srcdir`
+        GetSources(blossom5int32)
+        @build_steps begin
+            ChangeDirectory(blossom5srcdir)
+            FileRule(joinpath(libdir(blossom5int32), "blossom5float64.so"),
+                @build_steps begin
+                    CreateDirectory(joinpath(prefix, "lib"))
+                    `sh -c "patch < ../../sharedlib.patch"`
+                    `sh -c "cp ../../interface/* ./"`
+                    `sh -c "patch < ../../float64.patch"`
+                    MakeTargets(["all"])
+                    `cp -f blossom5.so $prefix/lib/blossom5float64.so`
+                end)
+        end
+    end), blossom5float64)
+
+@BinDeps.install Dict([(:blossom5int32, :_jl_blossom5int32),
+                       (:blossom5float64, :_jl_blossom5float64)])
