@@ -52,7 +52,7 @@ function Matching{T}(::Type{T}, node_num::Integer, edge_num_max::Integer)
         return Matching(T, Int32(node_num), Int32(edge_num_max))
     elseif T <: Integer
         return Matching(Int32, Int32(node_num), Int32(edge_num_max))
-    elseif T <: AbstactFloat
+    else # T <: AbstactFloat
         return Matching(Float64, Int32(node_num), Int32(edge_num_max))
     end
 end
