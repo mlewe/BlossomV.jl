@@ -46,7 +46,7 @@ end
         1 3 1000
     ]
 
-    m = Matching(Int, 4)
+    m = Matching(Int32, 4)
     for row_ii in 1:size(differences,1)
         n1,n2, c = differences[row_ii,:]
         add_edge(m,n1,n2,c)
@@ -67,7 +67,7 @@ end
         1 3 1000
     ]
 
-    m = Matching(Int, 4)
+    m = Matching(Int32, 4)
     for row_ii in 1:size(differences,1)
         n1,n2, c = differences[row_ii,:]
         add_edge(m,Int(n1),Int(n2),c)
