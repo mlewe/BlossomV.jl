@@ -14,10 +14,6 @@ export
 
 const CostT = Union{Int32, Float64}
 
-"Returns the blossom library filename for given type"
-blossom_lib(::Type{Float64}) = _jl_blossom5float64
-blossom_lib(::Type{Int32}) = _jl_blossom5int32
-
 type PerfectMatchingCtx{T<:CostT}
     ptr::Ptr{Void}
 
@@ -33,7 +29,12 @@ function destroy{T}(matching::PerfectMatchingCtx{T})
     if matching.ptr == C_NULL
         return
     end
-    ccall((:matching_destruct, blossom_lib(T)), Void, (Ptr{Void},), matching.ptr)
+    if T == Int32
+        ccall((:matching_destruct, _jl_blossom5int32), Void, (Ptr{Void},), matching.ptr)
+    elseif T == Float64
+        ccall((:matching_destruct, _jl_blossom5float64), Void, (Ptr{Void},), matching.ptr)
+    end
+
     matching.ptr = C_NULL
     nothing
 end
@@ -44,17 +45,28 @@ Matching(node_num::Integer) = Matching(Int32, node_num)
 Matching(node_num::Integer, edge_num_max::Integer) = Matching(Int32, node_num, edge_num_max)
 
 Matching{T}(::Type{T}, node_num::Integer) = Matching(T, node_num, dense_num_edges(node_num))
-Matching{T}(::Type{T}, node_num::Integer, edge_num_max::Integer) = Matching(T, Int32(node_num), Int32(edge_num_max))
 
-function Matching{T}(::Type{T}, node_num::Int32, edge_num_max::Int32)
-    error("Only cost types T ∈ $CostT are supported.")
+#TODO maybe use dispatch here
+function Matching{T}(::Type{T}, node_num::Integer, edge_num_max::Integer)
+    if T <: CostT
+        return Matching(T, Int32(node_num), Int32(edge_num_max))
+    elseif T <: Integer
+        return Matching(Int32, Int32(node_num), Int32(edge_num_max))
+    else # T <: AbstactFloat
+        return Matching(Float64, Int32(node_num), Int32(edge_num_max))
+    end
 end
 
 function Matching{T<:CostT}(::Type{T}, node_num::Int32, edge_num_max::Int32)
     assert(node_num % 2 == 0)
-    ptr = ccall((:matching_construct, blossom_lib(T)), Ptr{Void}, (Int32, Int32), node_num, edge_num_max)
+    if T == Int32
+        ptr = ccall((:matching_construct, _jl_blossom5int32), Ptr{Void}, (Int32, Int32), node_num, edge_num_max)
+    elseif T == Float64
+        ptr = ccall((:matching_construct, _jl_blossom5float64), Ptr{Void}, (Int32, Int32), node_num, edge_num_max)
+    end
     return PerfectMatchingCtx{T}(ptr)
 end
+
 
 function add_edge{T}(matching::PerfectMatchingCtx{T}, first_node::Integer, second_node::Integer, cost::Number)
 	add_edge(matching, Int32(first_node), Int32(second_node), T(cost))
@@ -65,17 +77,29 @@ function add_edge{T<:CostT}(matching::PerfectMatchingCtx{T}, first_node::Int32, 
     first_node >= 0  || error("first_node less than zero (value: $(first_node)). Indexes are zero-based.")
     second_node >= 0  || error("second_node less than zero (value: $(second_node)). Indexes are zero-based.")
     cost >= 0  || error("Cost must be positive. Edge between $(first_node) and $(second_node) has cost $cost.")
-    ccall((:matching_add_edge, blossom_lib(T)), Int32, (Ptr{Void}, Int32, Int32, T), matching.ptr, first_node, second_node, cost)
+    if T == Int32
+       ccall((:matching_add_edge, _jl_blossom5int32), Int32, (Ptr{Void}, Int32, Int32, Int32), matching.ptr, first_node, second_node, cost)
+    elseif T == Float64
+       ccall((:matching_add_edge, _jl_blossom5float64), Int32, (Ptr{Void}, Int32, Int32, Float64), matching.ptr, first_node, second_node, cost)
+    end
 end
 
 function solve{T}(matching::PerfectMatchingCtx{T})
-    ccall((:matching_solve, blossom_lib(T)), Void, (Ptr{Void},), matching.ptr)
+    if T == Int32
+        ccall((:matching_solve, _jl_blossom5int32), Void, (Ptr{Void},), matching.ptr)
+    elseif T == Float64
+        ccall((:matching_solve, _jl_blossom5float64), Void, (Ptr{Void},), matching.ptr)
+    end
     nothing
 end
 
 get_match(matching::PerfectMatchingCtx, node::Integer) = get_match(matching, Int32(node))
 function get_match{T<:CostT}(matching::PerfectMatchingCtx{T}, node::Int32)
-    ccall((:matching_get_match, blossom_lib(T)), Int32, (Ptr{Void}, Int32), matching.ptr, node)
+    if T == Int32
+        ccall((:matching_get_match, _jl_blossom5int32), Int32, (Ptr{Void}, Int32), matching.ptr, node)
+    elseif T == Float64
+        ccall((:matching_get_match, _jl_blossom5float64), Int32, (Ptr{Void}, Int32), matching.ptr, node)
+    end
 end
 
 function get_all_matches(m::PerfectMatchingCtx, n_nodes::Integer)
@@ -98,7 +122,11 @@ function get_all_matches(m::PerfectMatchingCtx, n_nodes::Integer)
 end
 
 function verbose{T}(matching::PerfectMatchingCtx{T}, verbose::Bool)
-    ccall((:matching_verbose, blossom_lib(T)), Void, (Ptr{Void}, Bool), matching.ptr, verbose)
+    if T == Int32
+        ccall((:matching_verbose, _jl_blossom5int32), Void, (Ptr{Void}, Bool), matching.ptr, verbose)
+    elseif T == Float64
+        ccall((:matching_verbose, _jl_blossom5float64), Void, (Ptr{Void}, Bool), matching.ptr, verbose)
+    end
 end
 
 end # module
