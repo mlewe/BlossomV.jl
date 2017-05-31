@@ -8,20 +8,41 @@ else
 end
 
 export
-    PerfectMatchingCtx,
-    Matching, solve, add_edge, get_match, get_all_matches
+    Matching,
+    solve, add_edge, get_match, get_all_matches
 
-
-const CostT = Union{Int32, Float64}
 
 "Returns the blossom library filename for given type"
 blossom_lib(::Type{Float64}) = _jl_blossom5float64
 blossom_lib(::Type{Int32}) = _jl_blossom5int32
 
-type PerfectMatchingCtx{T<:CostT}
+
+const CostT = Union{Int32, Float64}
+"""
+    type Matching{T<:Union{Int32, Float64}}
+        ptr::Ptr{Void}
+    end
+
+A type containing a pointer to a BlossomV struct for perfect matching.
+`T` is the type of the edge weights.
+
+The following constructors are available:
+
+    Matching(node_num)
+    Matching(node_num, edge_num_max)
+    Matching(T, node_num)
+    Matching(T, node_num, edge_num_max)
+
+If `T` is not given it will default to `Int32`.
+
+After adding edges and weights with `add_edge(match, i, j, weight)`
+use `solve(match)` to find an optimal matching and `get_match(match, i)`
+to retrieve it.
+"""
+type Matching{T<:CostT}
     ptr::Ptr{Void}
 
-     function (::Type{PerfectMatchingCtx{T}}){T<:CostT}(ptr::Ptr{Void})
+     function (::Type{Matching{T}}){T<:CostT}(ptr::Ptr{Void})
         self = new{T}(ptr)
         finalizer(self, destroy)
         verbose(self, false)
@@ -29,7 +50,7 @@ type PerfectMatchingCtx{T<:CostT}
     end
 end
 
-function destroy{T}(matching::PerfectMatchingCtx{T})
+function destroy{T}(matching::Matching{T})
     if matching.ptr == C_NULL
         return
     end
@@ -53,14 +74,14 @@ end
 function Matching{T<:CostT}(::Type{T}, node_num::Int32, edge_num_max::Int32)
     assert(node_num % 2 == 0)
     ptr = ccall((:matching_construct, blossom_lib(T)), Ptr{Void}, (Int32, Int32), node_num, edge_num_max)
-    return PerfectMatchingCtx{T}(ptr)
+    return Matching{T}(ptr)
 end
 
-function add_edge{T}(matching::PerfectMatchingCtx{T}, first_node::Integer, second_node::Integer, cost::Number)
+function add_edge{T}(matching::Matching{T}, first_node::Integer, second_node::Integer, cost::Number)
 	add_edge(matching, Int32(first_node), Int32(second_node), T(cost))
 end
 
-function add_edge{T<:CostT}(matching::PerfectMatchingCtx{T}, first_node::Int32, second_node::Int32, cost::T)
+function add_edge{T<:CostT}(matching::Matching{T}, first_node::Int32, second_node::Int32, cost::T)
     first_node != second_node || error("Can not have an edge between $(first_node) and itself.")
     first_node >= 0  || error("first_node less than zero (value: $(first_node)). Indexes are zero-based.")
     second_node >= 0  || error("second_node less than zero (value: $(second_node)). Indexes are zero-based.")
@@ -68,17 +89,17 @@ function add_edge{T<:CostT}(matching::PerfectMatchingCtx{T}, first_node::Int32, 
     ccall((:matching_add_edge, blossom_lib(T)), Int32, (Ptr{Void}, Int32, Int32, T), matching.ptr, first_node, second_node, cost)
 end
 
-function solve{T}(matching::PerfectMatchingCtx{T})
+function solve{T}(matching::Matching{T})
     ccall((:matching_solve, blossom_lib(T)), Void, (Ptr{Void},), matching.ptr)
     nothing
 end
 
-get_match(matching::PerfectMatchingCtx, node::Integer) = get_match(matching, Int32(node))
-function get_match{T<:CostT}(matching::PerfectMatchingCtx{T}, node::Int32)
+get_match(matching::Matching, node::Integer) = get_match(matching, Int32(node))
+function get_match{T<:CostT}(matching::Matching{T}, node::Int32)
     ccall((:matching_get_match, blossom_lib(T)), Int32, (Ptr{Void}, Int32), matching.ptr, node)
 end
 
-function get_all_matches(m::PerfectMatchingCtx, n_nodes::Integer)
+function get_all_matches(m::Matching, n_nodes::Integer)
     ret = Matrix{Int32}(2, n_nodes÷2)
     assigned = falses(n_nodes)
     kk = 1
@@ -97,7 +118,7 @@ function get_all_matches(m::PerfectMatchingCtx, n_nodes::Integer)
     return ret
 end
 
-function verbose{T}(matching::PerfectMatchingCtx{T}, verbose::Bool)
+function verbose{T}(matching::Matching{T}, verbose::Bool)
     ccall((:matching_verbose, blossom_lib(T)), Void, (Ptr{Void}, Bool), matching.ptr, verbose)
 end
 
