@@ -78,3 +78,11 @@ end
     @test get_match(m,2) == 0
     @test get_match(m,3) == 1
 end
+
+@testset "Error handling" begin
+    m = Matching(Int32, 2)
+    @test_throws ErrorException add_edge(m, 0, 0, 1)
+    @test_throws ErrorException add_edge(m, -1, 0, 1)
+    @test_throws ErrorException add_edge(m, 0, -1, 1)
+    @test_throws ErrorException add_edge(m, 0, 1, -1)
+end
