@@ -51,7 +51,7 @@ int blossom5_julia_version_major() {
 }
 
 int blossom5_julia_version_minor() {
-    return 2;
+    return 3;
 }
 
 #ifdef __cplusplus
