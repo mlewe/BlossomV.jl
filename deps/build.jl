@@ -1,6 +1,6 @@
 version = v"0.3.0"
 
-using BinDeps
+using BinDeps, Libdl
 
 @BinDeps.setup
 
