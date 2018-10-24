@@ -31,7 +31,7 @@ void matching_destruct(matching_t matching) {
 }
 
 int32_t matching_add_edge(matching_t matching, int32_t first_node, int32_t second_node, int32_t cost) {
-    matching->actual.AddEdge(first_node, second_node, cost);
+    return matching->actual.AddEdge(first_node, second_node, cost);
 }
 
 void matching_solve(matching_t matching) {
