@@ -1,9 +1,20 @@
 module BlossomV
 
-if isfile(joinpath(dirname(@__DIR__),"deps","deps.jl"))
-    include("../deps/deps.jl")
-else
-    error("BlossomV not properly installed. Please run Pkg.build(\"BlossomV\")")
+if VERSION >= v"0.7.0-DEV.3382"
+    import Libdl
+end
+
+# Load in `deps.jl`, complaining if it does not exist
+const depsjl_path = joinpath(dirname(@__FILE__), "..", "deps", "deps.jl")
+if !isfile(depsjl_path)
+    error("BlossomV was not build properly. Please run Pkg.build(\"BlossomV\")")
+end
+include(depsjl_path)
+
+# Module initialization function
+function __init__()
+    # Always check your dependencies from `deps.jl`
+    check_deps()
 end
 
 export
