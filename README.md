@@ -25,3 +25,12 @@ A common thing that goes wrong is not having current enough version of C++ and
 its stdlibs. Currently the minimum requirements are a compiler supporting the
 C++11 standard (e.g. gcc-4.6 on ubuntu 12.04, or newer, should be recent
 enough).
+
+## LICENSE
+This wrapper library is provided under the terms given in the
+[license](LICENSE.md).
+
+Be aware that the code of the actual BlossomV library itself underlies a
+different license.
+It is up to you to check, whether or not that license is acceptable for your
+usage.
