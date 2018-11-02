@@ -19,9 +19,7 @@ cause it to segfault -- often causing julia to segfault.
 
 
 ## Building
-You can install the package with the usual `Pkg.add("BlossomV")`.
-If something goes wrong you may need to delete `.julia/v0.5/BlossomV/julia/src/*`
-or similar.
+You can install the package with the usual `]add BlossomV`.
 
 A common thing that goes wrong is not having current enough version of C++ and
 its stdlibs. Currently the minimum requirements are a compiler supporting the
