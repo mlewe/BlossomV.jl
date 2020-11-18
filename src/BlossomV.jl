@@ -44,7 +44,7 @@ end
 get_match(matching::PerfectMatchingCtx, node::Integer) = get_match(matching, Int32(node))
 
 function get_all_matches(m::PerfectMatchingCtx, n_nodes::Integer)
-    ret = Matrix{Int32}(2, n_nodes÷2)
+    ret = Matrix{Int32}(undef, 2, n_nodes÷2)
     assigned = falses(n_nodes)
     kk = 1
     for ii in 0:n_nodes-1
