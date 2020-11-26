@@ -79,5 +79,4 @@ end
     @test_throws ErrorException add_edge(m, 0, 0, 1)
     @test_throws ErrorException add_edge(m, -1, 0, 1)
     @test_throws ErrorException add_edge(m, 0, -1, 1)
-    @test_throws ErrorException add_edge(m, 0, 1, -1)
 end
