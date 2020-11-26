@@ -44,7 +44,7 @@ end
 get_match(matching::PerfectMatchingCtx, node::Integer) = get_match(matching, Int32(node))
 
 function get_all_matches(m::PerfectMatchingCtx, n_nodes::Integer)
-    ret = Matrix{Int32}(2, n_nodes÷2)
+    ret = Matrix{Int32}(undef, 2, n_nodes÷2)
     assigned = falses(n_nodes)
     kk = 1
     for ii in 0:n_nodes-1
@@ -84,7 +84,6 @@ function add_edge(matching::PerfectMatchingCtx{$T}, first_node::Int32, second_no
     first_node != second_node || error("Can not have an edge between $(first_node) and itself.")
     first_node >= 0  || error("first_node less than zero (value: $(first_node)). Indexes are zero-based.")
     second_node >= 0  || error("second_node less than zero (value: $(second_node)). Indexes are zero-based.")
-    cost >= 0  || error("Cost must be positive. Edge between $(first_node) and $(second_node) has cost $cost.")
     ccall((:matching_add_edge, $_jl_blossom5), Int32, (Ptr{Cvoid}, Int32, Int32, $T), matching.ptr, first_node, second_node, cost)
 end
 
