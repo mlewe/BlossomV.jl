@@ -1,4 +1,4 @@
-version = v"0.4.2"
+version = v"0.4.3"
 
 using BinDeps, Libdl
 

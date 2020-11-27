@@ -1,6 +1,6 @@
 name = "BlossomV"
 uuid = "6c721016-9dae-5d90-abf6-67daaccb2332"
-version = "0.4.2"
+version = "0.4.3"
 
 [deps]
 BinDeps = "9e28174c-4ba2-5203-b857-d8d62c4213ee"
